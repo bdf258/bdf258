@@ -1,0 +1,1081 @@
+/*
+_       __        __                       __               __
+| |     / /__     / /___ _   _____     ____/ /__ _   _____  / /___  ____  ___  __________
+| | /| / / _ \   / / __ \ | / / _ \   / __  / _ \ | / / _ \/ / __ \/ __ \/ _ \/ ___/ ___/
+| |/ |/ /  __/  / / /_/ / |/ /  __/  / /_/ /  __/ |/ /  __/ / /_/ / /_/ /  __/ /  (__  )
+|__/|__/\___/  /_/\____/|___/\___/   \__,_/\___/|___/\___/_/\____/ .___/\___/_/  /____/
+                                                               /_/
+
+This js file is deliberatly left human-readable. So you can get an idea what is happening.
+If you have any questions or concerns about this code, please reach out to rene@experify.io
+Copyright 2021 Experify AG. All rights reserved.
+*/
+
+
+function experifyLoadButton(device, experifyID, runButtonAbTest = false, abTestId = '') {
+  
+  var experifyButtonDiv = document.createElement('div');
+  experifyButtonDiv.id = 'experifyButtonDiv';
+  document.body.appendChild(experifyButtonDiv);
+  var language = experifyDecideButtonLanguage()
+  var experifyButton = document.createElement('img');
+
+if (runButtonAbTest) {
+  var testid = abTestId
+  var abgroup = getTestGroup(testid)
+  if (abgroup === 'B') {
+    if (device === 'mobile') {
+      language === 'en' ? experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_en_mobile_'+abTestId+'-B.svg' : experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_de_mobile_'+abTestId+'-B.svg';
+      
+    } else {
+      language === 'en' ? experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_en_'+abTestId+'-B.svg' : experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_de_'+abTestId+'-B.svg';
+      
+    }
+  } else {
+    if (device === 'mobile') {
+      language === 'en' ? experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_en_mobile_'+abTestId+'-A.svg' : experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_de_mobile_'+abTestId+'-A.svg';
+      
+    } else {
+      language === 'en' ? experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_en_'+abTestId+'-A.svg' : experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_de_'+abTestId+'-A.svg';
+      
+    }
+  }
+  document.getElementById('experifyButtonDiv').appendChild(experifyButton);
+
+  var loadPic = document.createElement('img');
+  var cd1 = (Math.floor(window.innerWidth / 100)*100).toString();
+  var cd2 = (Math.floor(window.innerHeight / 100)*100).toString();
+  loadPic.id = "experifyLoadPic";
+  loadPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+  loadPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=experifyButton&ea=load&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId()).concat("&cd1=").concat(cd1).concat("&cd2=").concat(cd2).concat("&cd3=").concat(testid).concat("&cd4=").concat(abgroup);
+  document.getElementById('experifyButtonDiv').appendChild(loadPic);
+} else {
+  if (device === "mobile") {
+    language === 'en' ? experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_en_mobile.svg' : experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_de_mobile.svg';
+    
+  } else {
+    language === 'en' ? experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_en.svg' : experifyButton.src = 'https://assets.experify.io/pluginAssets/img/experifybutton_'+experifyID+'_de.svg';
+  }
+  document.getElementById('experifyButtonDiv').appendChild(experifyButton);
+
+  var loadPic = document.createElement('img');
+  var cd1 = (Math.floor(window.innerWidth / 100)*100).toString();
+  var cd2 = (Math.floor(window.innerHeight / 100)*100).toString();
+  loadPic.id = "experifyLoadPic";
+  loadPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+  loadPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=experifyButton&ea=load&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId()).concat("&cd1=").concat(cd1).concat("&cd2=").concat(cd2);
+  document.getElementById('experifyButtonDiv').appendChild(loadPic);
+}
+}
+
+function experifyLoadCloseButton(device) {
+  var experifyCloseButtonDiv = document.createElement('div');
+  experifyCloseButtonDiv.id = 'experifyCloseButtonDiv';
+  document.body.appendChild(experifyCloseButtonDiv);
+  var language = experifyDecideButtonLanguage()
+  var experifyCloseButton = document.createElement('img');
+  if (device === "mobile") {
+    language === 'en' ? experifyCloseButton.src = 'https://assets.experify.io/pluginAssets/img/mobile_close_en.svg' : experifyCloseButton.src = 'https://assets.experify.io/pluginAssets/img/mobile_close_de.svg';
+    
+  } else {
+    language === 'en' ? experifyCloseButton.src = 'https://assets.experify.io/pluginAssets/img/desktop_close_en.svg' : experifyCloseButton.src = 'https://assets.experify.io/pluginAssets/img/desktop_close_de.svg';
+  }
+  experifyCloseButton.addEventListener("click",function(e) {e.stopPropagation(); experifyCloseAttentionSeeker()});
+  document.getElementById('experifyCloseButtonDiv').appendChild(experifyCloseButton);
+}
+
+function experifyToggleButtons(actionButton=true) {
+  const experifyButtonDiv = document.getElementById("experifyButtonDiv");
+  const closeButtonDiv = document.getElementById("experifyCloseButtonDiv");    
+  if (actionButton === true) {
+      experifyButtonDiv.style.display = "block"
+      closeButtonDiv.style.display = "none"
+  } else {
+      experifyButtonDiv.style.display = "none"
+      closeButtonDiv.style.display = "block"
+  }
+}
+
+function experifyLoadOverlay() {
+
+  if (experifyGetViewportDimensions()[0] > 420) {
+    experifyLoadDesktopOverlay();
+  } else {
+    experifyLoadMobileOverlay();
+  };
+  experifySetAttentionSeekerCookie();
+}
+
+function experifyLoadDesktopOverlay() {
+
+  var utmString = getUtmTrackingString();
+  var experifyMapUrl = "https://plugin.experify.io/overlay/";
+  var mapWidth = Math.min(0.9*experifyGetViewportDimensions()[0], 1600);
+  var mapHeight = 0.9*experifyGetViewportDimensions()[1];
+  var overlayLeftMargin = (experifyGetViewportDimensions()[0]-mapWidth)/2;
+  var overlayTopMargin = (experifyGetViewportDimensions()[1]-mapHeight)/2;
+
+  var overlay = document.createElement('div');
+  overlay.style.cssText = `
+      width: ${mapWidth}px;
+      height: ${mapHeight}px;
+      top: ${overlayTopMargin}px;
+      left: ${overlayLeftMargin}px;
+      display: block;
+  `;
+  overlay.id = 'experifyOverlay';
+  document.body.appendChild(overlay);
+
+  var experifyID = 'radon';
+
+  var map = document.createElement('iframe');
+  utmString ? map.src = `${experifyMapUrl}${experifyID}${utmString}` : map.src = `${experifyMapUrl}${experifyID}`;
+  map.frameBorder = '0';
+  map.width =  `${mapWidth}px`;
+  map.height = `${mapHeight}px`;
+  map.style.cssText = 'border-radius: 8px; position: absolute;';
+  map.allowtransparency = 'false';
+  document.getElementById('experifyOverlay').appendChild(map);
+
+  var close = document.createElement('img');
+  close.id = 'experifyButtonOverlayClose'
+  close.src = "https://assets.experify.io/pluginAssets/img/close-orange.svg";
+  close.style.cssText = `
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  z-index: 9876543210;`;
+  close.addEventListener("click",function(e) {e.stopPropagation(); experifyToggleOverlay();});
+  document.getElementById('experifyOverlay').appendChild(close);
+
+  var clickPic = document.createElement('img');
+  clickPic.id = "experifyClickPic";
+  clickPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+  document.getElementById('experifyOverlay').appendChild(clickPic);
+
+  var darkBg = document.createElement('div');
+  darkBg.id = "experifyDarkBg";
+  darkBg.style.cssText = `
+  display: block;
+  `
+  darkBg.addEventListener("click",function(e) {e.stopPropagation(); experifyToggleOverlay();});
+  document.body.appendChild(darkBg);
+
+}
+
+function experifyLoadMobileOverlay() {
+
+  var utmString = getUtmTrackingString();
+  var experifyMapUrl = "https://plugin.experify.io/overlay/";
+  var mapWidth = experifyGetViewportDimensions()[0];
+  var mapHeight = experifyGetViewportDimensions()[1];
+  var overlayLeftMargin = 0;
+  var overlayTopMargin = 0;
+
+  var overlay = document.createElement('div');
+  overlay.style.cssText = `
+      position: fixed;
+      display: block;
+      width: ${mapWidth}px;
+      height: ${mapHeight}px;
+      top: ${overlayTopMargin}px;
+      left: ${overlayLeftMargin}px;
+      right: auto;
+      bottom: auto;
+      background-color: rgba(255,255,255,1);
+      z-index: 99876543210;
+      cursor: pointer;
+      border-radius: 8px;
+  `;
+  overlay.id = 'experifyOverlay';
+  document.body.appendChild(overlay);
+
+  //var experifyID = document.getElementById("experifyTag").getAttribute("data-experify");
+  var experifyID = 'radon';
+
+  var map = document.createElement('iframe');
+  utmString ? map.src = `${experifyMapUrl}${experifyID}${utmString}` : map.src = `${experifyMapUrl}${experifyID}`;
+  map.frameBorder = '0';
+  map.width =  `${mapWidth}px`;
+  map.height = `${mapHeight}px`;
+  map.style.cssText = 'position: absolute;';
+  map.allowtransparency = 'true';
+  document.getElementById('experifyOverlay').appendChild(map);
+
+  var close = document.createElement('div');
+  close.id = 'experifyButtonOverlayClose';
+  close.style.cssText = `
+  width: 35px;
+  height: 25px;
+  position: absolute;
+  right: 7px;
+  top: 8px;
+  z-index: 9876543210;`;
+  close.addEventListener("click",experifyToggleOverlay);
+  document.getElementById('experifyOverlay').appendChild(close);
+
+
+  var clickPic = document.createElement('img');
+  clickPic.id = "experifyClickPic";
+  clickPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+  document.getElementById('experifyOverlay').appendChild(clickPic);
+
+  var darkBg = document.createElement('div');
+  darkBg.id = "experifyDarkBg";
+  document.body.appendChild(darkBg);
+
+}
+
+function experifyLoadMobileOverlayForDesktop() {
+
+  var utmString = getUtmTrackingString();
+  var experifyMapUrl = "https://plugin.experify.io/overlay/";
+  var mapWidth = 400;
+  var mapHeight = experifyGetViewportDimensions()[1];
+  var overlayRightMargin = 0;
+  var overlayTopMargin = 0;
+
+  var overlay = document.createElement('div');
+  overlay.style.cssText = `
+      position: fixed;
+      display: block;
+      width: ${mapWidth}px;
+      height: ${mapHeight}px;
+      top: ${overlayTopMargin}px;
+      right: ${overlayRightMargin}px;
+      left: auto;
+      bottom: auto;
+      background-color: rgba(255,255,255,1);
+      z-index: 99876543210;
+      cursor: pointer;
+      border-radius: 8px;
+  `;
+  overlay.id = 'experifyOverlay';
+  document.body.appendChild(overlay);
+
+  //var experifyID = document.getElementById("experifyTag").getAttribute("data-experify");
+  var experifyID = 'radon';
+
+  var map = document.createElement('iframe');
+  utmString ? map.src = `${experifyMapUrl}${experifyID}${utmString}` : map.src = `${experifyMapUrl}${experifyID}`;
+  map.frameBorder = '0';
+  map.width =  `${mapWidth}px`;
+  map.height = `${mapHeight}px`;
+  map.style.cssText = 'position: absolute;';
+  map.allowtransparency = 'true';
+  document.getElementById('experifyOverlay').appendChild(map);
+
+  var close = document.createElement('div');
+  close.id = 'experifyButtonOverlayClose';
+  close.style.cssText = `
+  width: 35px;
+  height: 25px;
+  position: absolute;
+  right: 7px;
+  top: 8px;
+  z-index: 9876543210;`;
+  close.addEventListener("click",experifyToggleOverlay);
+  document.getElementById('experifyOverlay').appendChild(close);
+
+
+  var clickPic = document.createElement('img');
+  clickPic.id = "experifyClickPic";
+  clickPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+  document.getElementById('experifyOverlay').appendChild(clickPic);
+
+  var darkBg = document.createElement('div');
+  darkBg.id = "experifyDarkBg";
+  document.body.appendChild(darkBg);
+
+}
+
+function experifyLoadAttentionSeeker(language, device) {  
+  var wrapperDiv = document.createElement('div');
+  wrapperDiv.id = 'experifyAttentionSeeker';
+  document.body.appendChild(wrapperDiv);
+  wrapperDiv.addEventListener('click', experifyAttentionSeekerClick);
+  
+    if (device === "desktop") {
+        var headerDiv = document.createElement('div')
+        var headerDiv = document.createElement('div')
+        headerDiv.style.cssText = "height: 30px; width: 100%; background-color: #fff; text-align: center; font-family: sans-serif; font-weight: 700; padding: 5px 5%; font-size: 14px; line-height: 1.5em; letter-spacing: 0.03em; color: #303133; box-sizing: border-box; background-color: #ffb24a"
+        
+        if (language === 'de') {  
+            headerDiv.innerHTML = 'FRAG EINEN BESITZER'
+        } else {
+            headerDiv.innerHTML = 'ASK AN OWNER'
+        }
+        wrapperDiv.append(headerDiv);
+
+        var picDiv = document.createElement('div')
+        picDiv.style.cssText = "height: 145px; width: 100%; image-rendering: pixelated; background-image: url('https://assets.experify.io/pluginAssets/img/attention-seeker_radon.png'); background-position: center; box-sizing: content-box;"
+        wrapperDiv.append(picDiv);
+    }
+
+    if (device === "mobile") {
+      var headerDiv = document.createElement('div')
+      var headerDiv = document.createElement('div')
+      headerDiv.style.cssText = "height: 30px; width: 100%; background-color: #fff; text-align: center; font-family: sans-serif; font-weight: 700; padding: 5px 5%; font-size: 14px; line-height: 1.5em; letter-spacing: 0.03em; color: #303133; box-sizing: border-box; background-color: #ffb24a"
+      
+      if (language === 'de') {  
+          headerDiv.innerHTML = 'FRAG EINEN BESITZER'
+      } else {
+          headerDiv.innerHTML = 'ASK AN OWNER'
+      }
+      wrapperDiv.append(headerDiv);
+
+      var picDiv = document.createElement('div')
+      picDiv.style.cssText = "height: 145px; width: 100%; image-rendering: pixelated; background-image: url('https://assets.experify.io/pluginAssets/img/attention-seeker_radon.png'); background-position: center; box-sizing: content-box;"
+      wrapperDiv.append(picDiv);
+  }
+
+    var loadPic = document.createElement('img');
+    loadPic.id = "experifyAttentionSeekerLoadPic";
+    loadPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+    wrapperDiv.append(loadPic);
+  
+    var clickPic = document.createElement('img');
+    clickPic.id = "experifyAttentionSeekerClickPic";
+    clickPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+    wrapperDiv.append(clickPic);  
+}
+
+function experifyOpenAttentionSeeker() {
+  var x = document.getElementById("experifyAttentionSeeker");
+  x.style.display = "block";
+  experifySetAttentionSeekerCookie();
+
+  var loadPic = document.getElementById("experifyAttentionSeekerLoadPic");
+  if (loadPic.src === "") {
+    //var experifyID = document.getElementById("experifyTag").getAttribute("data-experify");
+    var experifyID = 'radon';
+    loadPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=experifyAttentionSeeker&ea=open&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId());
+  }
+  experifyToggleButtons(false)
+}
+
+function experifySetAttentionSeekerCookie() {
+  document.cookie = "eas = 1; max-age=259200";
+}
+
+function experifyAttentionSeekerClick() {
+  var loadPic = document.getElementById("experifyAttentionSeekerClickPic");
+  if (loadPic.src === "") {
+    //var experifyID = document.getElementById("experifyTag").getAttribute("data-experify");
+    var experifyID = 'radon';
+    loadPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=experifyAttentionSeeker&ea=click&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId());
+  };
+  experifyCloseAttentionSeeker();
+  experifyToggleOverlay();
+  experifyToggleButtons();
+
+}
+
+function experifyDecideAndOpenAttentionSeeker() {
+  //Todo: activate
+  if (!document.cookie.includes('eas=1')) {
+    experifyOpenAttentionSeeker()
+  }
+}
+
+function experifyCloseAttentionSeeker() {
+  var x = document.getElementById("experifyAttentionSeeker");
+  x.style.display = "none";
+  experifyToggleButtons(true);
+}
+
+function experifyAddCssStyle(device) {
+  var style = document.createElement('style');
+  if (device === 'desktop') {
+    style.innerHTML = `
+
+    @keyframes pulse {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    #experifyAttentionSeeker {
+      position: fixed;
+      display: none;
+      width: 90vw;
+      max-width: 320px;
+      height: 175px;
+      top: auto;
+      left: auto;
+      right: 10px;
+      bottom: 130px;
+      background-color: rgba(255,255,255,1);
+      z-index: 64433;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #ffb24a;
+  }
+
+    #experifyAttentionSeekerClose {
+      height: 16px; 
+      width: 16px;  
+      position: absolute; 
+      top: 3px; 
+      right: 3px;
+      cursor: pointer;
+    }
+
+    #experifyButtonDiv {
+      bottom: 75px; 
+      right: 0px;
+      position: fixed;
+      display: block;
+      cursor: pointer;
+      z-index: 100;
+      animation: pulse 3s infinite alternate;
+    }
+
+    #experifyCloseButtonDiv {
+      bottom: 75px; 
+      right: 0px;
+      position: fixed;
+      display: none;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    #experifyDarkBg {
+      position: fixed;
+      display: none;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 64432;
+      cursor: pointer;
+    }
+
+    #experifyOverlay {
+      position: fixed;
+      display: none;
+      right: auto;
+      bottom: auto;
+      background-color: rgba(255,255,255,1);
+      z-index: 99876543210;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .experifyNoScroll {
+      overflow: hidden;
+    }
+    `;
+  } else if (device === 'mobile') {
+    style.innerHTML = `
+
+    @keyframes pulse {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    #experifyAttentionSeeker {
+      position: fixed;
+      display: none;
+      width: 90vw;
+      max-width: 420px;
+      height: 175px;
+      top: auto;
+      left: auto;
+      right: 5vw;
+      bottom: 80px;
+      background-color: rgba(255,255,255,1);
+      z-index: 99;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #ffb24a;
+    }
+
+    #experifyAttentionSeekerClose {
+      height: 16px; 
+      width: 16px;  
+      position: absolute; 
+      top: 3px; 
+      right: 3px;
+      cursor: pointer;
+    }
+
+    #experifyButtonDiv {
+      bottom: 25px;
+      left: 0px;
+      position: fixed;
+      display: block;
+      cursor: pointer;
+      z-index: 64434;
+      animation: pulse 3s infinite alternate;
+    }
+
+    #experifyCloseButtonDiv {
+      bottom: 25px;
+      left: 0px;
+      position: fixed;
+      display: none;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    #experifyDarkBg {
+      position: fixed;
+      display: none;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 64432;
+      cursor: pointer;
+    }
+
+    .experifyNoScroll {
+      overflow: hidden;
+    }
+    `;
+  }
+  document.head.appendChild(style);
+}
+
+function experifyGetViewportDimensions() {
+ var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+ var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+ return([w,h]);
+}
+
+function experifyCreateClientIdEquivalent() {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const randomId = Math.floor(Math.random() * 10000000000);
+  return `${randomId}.${timestamp}`;
+}
+
+function experifyGetClientId() {
+  var clientID;
+  try {
+    ga(function(tracker) {
+      clientID = tracker.get('clientId');
+    });
+
+    if (!clientID) {
+      clientID = ga.getAll()[0].get('clientId');
+    }
+  }
+  catch (err) { 
+    clientID = experifyCreateClientIdEquivalent();
+  }
+  return clientID;
+}
+
+function experifyShowOnThisPath() {
+  return true;
+}
+
+function experifyIsNotIncompatibleAgent() {
+  const uAgt = navigator.userAgent;
+
+  if (/iP(hone|od|ad)/.test(navigator.platform)) {
+    var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+    version_array = [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+    if (version_array[0] >= 12) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  if (uAgt.indexOf('MSIE') != -1) {
+    return false;
+  }
+  if (uAgt.indexOf('Firefox') != -1 && parseInt(uAgt.substring(uAgt.indexOf('Firefox')+8,uAgt.indexOf('Firefox')+10)) < 75) {
+    return false;
+  }
+  if (uAgt.indexOf('Edg') != -1 && parseInt(uAgt.substring(uAgt.indexOf('Edg')+4,uAgt.indexOf('Edg')+6)) < 80) {
+    return false;
+  }
+  return true;
+}   
+
+function experifyTrackConversion() {
+  if (document.cookie.includes('__expusr72')) {
+    var loadPic = document.createElement('img');
+    var experifyID = 'radon';
+    loadPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+    loadPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=brandEvent&ea=conversion72&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId());
+    document.getElementById('experifyButtonDiv').appendChild(loadPic);
+  }
+  else if (document.cookie.includes('__expusr720')) {
+    var loadPic = document.createElement('img');
+    var experifyID = 'radon';
+    loadPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+    loadPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=brandEvent&ea=conversion720&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId());
+    document.getElementById('experifyButtonDiv').appendChild(loadPic);
+  } else {
+    var loadPic = document.createElement('img');
+    var experifyID = 'radon';
+    loadPic.style.cssText = "width: 1px; height: 1px; opacity: 0;";
+    loadPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=brandEvent&ea=conversion&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId());
+    document.getElementById('experifyButtonDiv').appendChild(loadPic);
+  }
+
+}
+
+function experifyRegisterClickEvents() {
+  const experifyButton = document.getElementById('experifyButtonDiv')
+  experifyButton ? experifyButton.addEventListener("click",experifyToggleOverlay): null;
+
+  const externalTriggerElement = document.getElementById('experifyTrigger')
+  externalTriggerElement ? externalTriggerElement.addEventListener("click",experifyToggleOverlay): null;
+
+  var classTriggerElements = document.getElementsByClassName("experifyTrigger");
+
+  Array.from(classTriggerElements).forEach(function(element) {
+    element.addEventListener('click', experifyToggleOverlay);
+  });
+
+  var classTriggerElementsConversion = document.getElementsByClassName("a-button--buy");
+
+  Array.from(classTriggerElementsConversion).forEach(function(element) {
+    element.addEventListener('click', experifyTrackConversion);
+  });
+
+}
+
+function experifyLoadAndRegisterAttentionSeeker(device, attentioneSeekerTimingMs, runAttentionSeekerAbTest = false, abTestId = '') {
+
+  if (runAttentionSeekerAbTest){
+    var abgroup = getTestGroup(abTestId)
+    if (abgroup === 'A'){
+      experifyLoadAttentionSeeker(experifyDecideButtonLanguage(), device);
+      window.setTimeout(experifyDecideAndOpenAttentionSeeker, attentioneSeekerTimingMs);
+    }
+  } else {
+    experifyLoadAttentionSeeker(experifyDecideButtonLanguage(), device);
+    window.setTimeout(experifyDecideAndOpenAttentionSeeker, attentioneSeekerTimingMs);
+  }
+}
+
+function experifyDecideButtonLanguage() {
+  var url = window.location.href;
+  var enPattern = /radon-bikes.de\/en\//i;
+  var frPattern = /radon-bikes.de\/fr\//i;
+  var esPattern = /radon-bikes.de\/es\//i;
+  var itPattern = /radon-bikes.de\/it\//i;
+  if (enPattern.test(url) || frPattern.test(url) || itPattern.test(url) || esPattern.test(url)) {
+    return "en";
+  } else {
+    return "de";
+  }
+}
+
+function experifyDecideAndActivate(experifyID, device, attentionSeekerActive=false, attentioneSeekerTimingMs=10000, runBtnAbTest = false, runAtnskAbTest = false, abTestId = ''){
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  let showExperifyOverlay;
+  urlParams.get('experifyact') == "1" ? showExperifyOverlay = true : showExperifyOverlay = false;
+
+  if (runBtnAbTest === true || runAtnskAbTest === true) {
+    defineTestGroup(abTestId)
+  }
+
+  if (experifyShowOnThisPath()
+      && experifyIsNotIncompatibleAgent()
+      && !showExperifyOverlay) {
+    experifyAddCssStyle(device);
+    window.setTimeout(function(){
+      experifyLoadButton(device, experifyID, runBtnAbTest, abTestId);
+      experifyLoadCloseButton(device);
+      experifyRegisterClickEvents();
+      if (attentionSeekerActive == true) {
+          experifyLoadAndRegisterAttentionSeeker(device, attentioneSeekerTimingMs, runAtnskAbTest, abTestId);
+      }
+    },500);
+  } else 
+  if (experifyShowOnThisPath()
+      && experifyIsNotIncompatibleAgent()
+      && showExperifyOverlay) {
+    experifyAddCssStyle(device);
+    window.setTimeout(function(){
+      experifyLoadButton(device, experifyID, runBtnAbTest, abTestId);
+      experifyLoadCloseButton(device);
+      experifyRegisterClickEvents();
+      experifyToggleOverlay();},500);
+  }
+}
+
+function defineDevice() {
+  if (experifyGetViewportDimensions()[0] >= 500) {
+    return 'desktop'
+  } else {
+    return 'mobile'
+  }
+}
+
+function defineTestGroup(testId) {
+
+  if (document.cookie.includes(testId)) {
+    return getTestGroup(testId)
+  } else {
+
+    let group = '';
+    if (Math.random() < 0.3) {group = 'A'}
+    else {group = 'B'}
+
+    document.cookie = testId+" = "+group+"; max-age=3600";
+
+    return group;
+  }
+}
+
+function getTestGroup(testId) {
+  let name = testId + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function getUtmTrackingString() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmMedium = urlParams.get('exp_utm_medium');
+  const utmCampaign = urlParams.get('exp_utm_campaign');
+  const utmSource = urlParams.get('exp_utm_source');
+
+  let utmString = '';
+
+  utmMedium ? utmString = utmString + '?utm_medium=' + utmMedium : null;
+  utmCampaign && !utmString ? utmString = utmString + '?utm_campaign=' + utmCampaign : null;
+  utmCampaign && utmString ? utmString = utmString + '&utm_campaign=' + utmCampaign : null;
+  utmSource && !utmString ? utmString = utmString + '?utm_source=' + utmSource : null;
+  utmSource && utmString ? utmString = utmString + '&utm_source=' + utmSource : null;
+
+  return(utmString);
+}
+
+//Ops! Customized conversion tracking and customized mobile-layout attention seeker as A/B Test ...
+
+
+/////////////////////////////
+// Start of bodyScrollLock
+(function (global, factory) {
+  if (typeof define === "function" && define.amd) {
+    define(['exports'], factory);
+  } else if (typeof exports !== "undefined") {
+    factory(exports);
+  } else {
+    var mod = {
+      exports: {}
+    };
+    factory(mod.exports);
+    global.bodyScrollLock = mod.exports;
+  }
+})(this, function (exports) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  function _toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+        arr2[i] = arr[i];
+      }
+
+      return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  }
+
+  // Older browsers don't support event options, feature detect it.
+
+  // Adopted and modified solution from Bohdan Didukh (2017)
+  // https://stackoverflow.com/questions/41594997/ios-10-safari-prevent-scrolling-behind-a-fixed-overlay-and-maintain-scroll-posi
+
+  var hasPassiveEvents = false;
+  if (typeof window !== 'undefined') {
+    var passiveTestOptions = {
+      get passive() {
+        hasPassiveEvents = true;
+        return undefined;
+      }
+    };
+    window.addEventListener('testPassive', null, passiveTestOptions);
+    window.removeEventListener('testPassive', null, passiveTestOptions);
+  }
+
+  var isIosDevice = typeof window !== 'undefined' && window.navigator && window.navigator.platform && /iP(ad|hone|od)/.test(window.navigator.platform);
+
+
+  var locks = [];
+  var documentListenerAdded = false;
+  var initialClientY = -1;
+  var previousBodyOverflowSetting = void 0;
+  var previousBodyPaddingRight = void 0;
+
+  // returns true if `el` should be allowed to receive touchmove events.
+  var allowTouchMove = function allowTouchMove(el) {
+    return locks.some(function (lock) {
+      if (lock.options.allowTouchMove && lock.options.allowTouchMove(el)) {
+        return true;
+      }
+
+      return false;
+    });
+  };
+
+  var preventDefault = function preventDefault(rawEvent) {
+    var e = rawEvent || window.event;
+
+    // For the case whereby consumers adds a touchmove event listener to document.
+    // Recall that we do document.addEventListener('touchmove', preventDefault, { passive: false })
+    // in disableBodyScroll - so if we provide this opportunity to allowTouchMove, then
+    // the touchmove event on document will break.
+    if (allowTouchMove(e.target)) {
+      return true;
+    }
+
+    // Do not prevent if the event has more than one touch (usually meaning this is a multi touch gesture like pinch to zoom).
+    if (e.touches.length > 1) return true;
+
+    if (e.preventDefault) e.preventDefault();
+
+    return false;
+  };
+
+  var setOverflowHidden = function setOverflowHidden(options) {
+    // Setting overflow on body/documentElement synchronously in Desktop Safari slows down
+    // the responsiveness for some reason. Setting within a setTimeout fixes this.
+    setTimeout(function () {
+      // If previousBodyPaddingRight is already set, don't set it again.
+      if (previousBodyPaddingRight === undefined) {
+        var _reserveScrollBarGap = !!options && options.reserveScrollBarGap === true;
+        var scrollBarGap = window.innerWidth - document.documentElement.clientWidth;
+
+        if (_reserveScrollBarGap && scrollBarGap > 0) {
+          previousBodyPaddingRight = document.body.style.paddingRight;
+          document.body.style.paddingRight = scrollBarGap + 'px';
+        }
+      }
+
+      // If previousBodyOverflowSetting is already set, don't set it again.
+      if (previousBodyOverflowSetting === undefined) {
+        previousBodyOverflowSetting = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  };
+
+  var restoreOverflowSetting = function restoreOverflowSetting() {
+    // Setting overflow on body/documentElement synchronously in Desktop Safari slows down
+    // the responsiveness for some reason. Setting within a setTimeout fixes this.
+    setTimeout(function () {
+      if (previousBodyPaddingRight !== undefined) {
+        document.body.style.paddingRight = previousBodyPaddingRight;
+
+        // Restore previousBodyPaddingRight to undefined so setOverflowHidden knows it
+        // can be set again.
+        previousBodyPaddingRight = undefined;
+      }
+
+      if (previousBodyOverflowSetting !== undefined) {
+        document.body.style.overflow = previousBodyOverflowSetting;
+
+        // Restore previousBodyOverflowSetting to undefined
+        // so setOverflowHidden knows it can be set again.
+        previousBodyOverflowSetting = undefined;
+      }
+    });
+  };
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
+  var isTargetElementTotallyScrolled = function isTargetElementTotallyScrolled(targetElement) {
+    return targetElement ? targetElement.scrollHeight - targetElement.scrollTop <= targetElement.clientHeight : false;
+  };
+
+  var handleScroll = function handleScroll(event, targetElement) {
+    var clientY = event.targetTouches[0].clientY - initialClientY;
+
+    if (allowTouchMove(event.target)) {
+      return false;
+    }
+
+    if (targetElement && targetElement.scrollTop === 0 && clientY > 0) {
+      // element is at the top of its scroll.
+      return preventDefault(event);
+    }
+
+    if (isTargetElementTotallyScrolled(targetElement) && clientY < 0) {
+      // element is at the top of its scroll.
+      return preventDefault(event);
+    }
+
+    event.stopPropagation();
+    return true;
+  };
+
+  var disableBodyScroll = exports.disableBodyScroll = function disableBodyScroll(targetElement, options) {
+    if (isIosDevice) {
+      // targetElement must be provided, and disableBodyScroll must not have been
+      // called on this targetElement before.
+      if (!targetElement) {
+        // eslint-disable-next-line no-console
+        console.error('disableBodyScroll unsuccessful - targetElement must be provided when calling disableBodyScroll on IOS devices.');
+        return;
+      }
+
+      if (targetElement && !locks.some(function (lock) {
+        return lock.targetElement === targetElement;
+      })) {
+        var lock = {
+          targetElement: targetElement,
+          options: options || {}
+        };
+
+        locks = [].concat(_toConsumableArray(locks), [lock]);
+
+        targetElement.ontouchstart = function (event) {
+          if (event.targetTouches.length === 1) {
+            // detect single touch.
+            initialClientY = event.targetTouches[0].clientY;
+          }
+        };
+        targetElement.ontouchmove = function (event) {
+          if (event.targetTouches.length === 1) {
+            // detect single touch.
+            handleScroll(event, targetElement);
+          }
+        };
+
+        if (!documentListenerAdded) {
+          document.addEventListener('touchmove', preventDefault, hasPassiveEvents ? { passive: false } : undefined);
+          documentListenerAdded = true;
+        }
+      }
+    } else {
+      setOverflowHidden(options);
+      var _lock = {
+        targetElement: targetElement,
+        options: options || {}
+      };
+
+      locks = [].concat(_toConsumableArray(locks), [_lock]);
+    }
+  };
+
+  var clearAllBodyScrollLocks = exports.clearAllBodyScrollLocks = function clearAllBodyScrollLocks() {
+    if (isIosDevice) {
+      // Clear all locks ontouchstart/ontouchmove handlers, and the references.
+      locks.forEach(function (lock) {
+        lock.targetElement.ontouchstart = null;
+        lock.targetElement.ontouchmove = null;
+      });
+
+      if (documentListenerAdded) {
+        document.removeEventListener('touchmove', preventDefault, hasPassiveEvents ? { passive: false } : undefined);
+        documentListenerAdded = false;
+      }
+
+      locks = [];
+
+      // Reset initial clientY.
+      initialClientY = -1;
+    } else {
+      restoreOverflowSetting();
+      locks = [];
+    }
+  };
+
+  var enableBodyScroll = exports.enableBodyScroll = function enableBodyScroll(targetElement) {
+    if (isIosDevice) {
+      if (!targetElement) {
+        // eslint-disable-next-line no-console
+        console.error('enableBodyScroll unsuccessful - targetElement must be provided when calling enableBodyScroll on IOS devices.');
+        return;
+      }
+
+      targetElement.ontouchstart = null;
+      targetElement.ontouchmove = null;
+
+      locks = locks.filter(function (lock) {
+        return lock.targetElement !== targetElement;
+      });
+
+      if (documentListenerAdded && locks.length === 0) {
+        document.removeEventListener('touchmove', preventDefault, hasPassiveEvents ? { passive: false } : undefined);
+
+        documentListenerAdded = false;
+      }
+    } else {
+      locks = locks.filter(function (lock) {
+        return lock.targetElement !== targetElement;
+      });
+      if (!locks.length) {
+        restoreOverflowSetting();
+      }
+    }
+  };
+});
+// End of bodyScrollLock
+/////////////////////////////
+
+const experifyDisableBodyScroll = bodyScrollLock.disableBodyScroll;
+
+function experifyToggleOverlay(experifyID = 'radon', trackAbTest = true, abTestId = 'radon-atnsk-1') {
+  const overlay = document.getElementById("experifyOverlay");
+  const background = document.getElementById("experifyDarkBg");
+
+  if (!overlay) {
+    experifyLoadOverlay();
+  }
+  else if (overlay.style.display === "none") {
+    overlay.style.display = "block";
+    background.style.display = "block";
+    experifyDisableBodyScroll(overlay, {
+      allowTouchMove: el => (true)
+    });
+  } else {
+    overlay.style.display = "none";
+    background.style.display = "none";
+    bodyScrollLock.clearAllBodyScrollLocks();
+  }
+
+  var clickPic = document.getElementById("experifyClickPic");
+  if (clickPic.src === "") {
+    //var experifyID = document.getElementById("experifyTag").getAttribute("data-experify");
+    var experifyID = experifyID;
+    if (trackAbTest === false) {
+      clickPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=experifyButton&ea=click&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId());
+    } else {
+      var abgroup = getTestGroup(abTestId)
+      clickPic.src = "https://www.google-analytics.com/collect?v=1&tid=UA-137494064-2&t=event&ec=experifyButton&ea=click&aip=1&el=".concat(experifyID).concat("&cid=").concat(experifyGetClientId()).concat("&cd3=").concat(abTestId).concat("&cd4=").concat(abgroup);
+    }
+  }
+  document.cookie = "__expusr720 = 1; max-age=2592000";
+  document.cookie = "__expusr72 = 1; max-age=259200";
+}
+
+window.onload = experifyDecideAndActivate('radon', defineDevice(), true, 10000, false, true, 'radon-atnsk-1');
